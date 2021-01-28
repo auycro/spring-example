@@ -26,3 +26,32 @@ JUnit 5
   2.1 Add Score.java
 
   2.2 Add ScoreController.java
+
+3. Prepare database
+
+  3.1 Prepate Dockerfile
+
+  3.2 Run 'run.sh'
+
+4. Try access to db (https://spring.io/guides/gs/accessing-data-mysql/)
+
+  4.1 Add dependencies(JPA,MysqlDriver) in build.gradle, Reload
+
+  4.2 Add Entity and Repository
+
+----------
+
+Some useful command
+
+- Reload gradle
+
+```
+rm -rf $HOME/.gradle/caches/
+./gradlew build --refresh-dependencies
+```
+
+- Refresh dependencies
+
+```
+./gradlew assemble  --refresh-dependencies
+```

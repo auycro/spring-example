@@ -13,12 +13,4 @@ class ScoreApplicationTests {
 	void contextLoads() {
 	}
 
-  String a = "aaaadddd";
-
-  @Test
-  @DisplayName("Test jUnit Version")
-  void testJUnit() {
-    assertEquals("aaaaa", a);
-  }
-
 }
