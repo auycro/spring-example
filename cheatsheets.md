@@ -76,10 +76,12 @@ datetime
 A date in the format of "YYYY-MM-DD", which means to the beginning midnight of the following day.
 ```
 
-- Test Create 
+- Test Curl 
 
 ```
-curl -X POST localhost:8080/score -d player=First -d score=6666 -d time=2021-01-25
+curl -X POST localhost:8080/scores -d player=First -d score=6666 -d time=2021-01-25
+curl -X DELETE localhost:8080/scores/21
+curl localhost:8080/scores/20
 ```
 
 - Login to Mysql

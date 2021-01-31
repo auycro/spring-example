@@ -1,18 +1,16 @@
 package com.auycro.score.controller;
-//import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.StackWalker.Option;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -27,67 +25,111 @@ public class ScoreController {
   @Autowired
   private ScoreRepository scoreRepository;
 
-  @GetMapping("/")
-  String hello() {
-      return "Hello Spring Boot!";
-  }
+  //@GetMapping("/")
+  //String hello() {
+  //    return "Hello Spring Boot!";
+  //}
 
   //Get Score
   //GET /scores/{id}
-	@GetMapping("/scores")
-	public Score getScore(@RequestParam(value = "id", defaultValue = "0") long id) {
-    List<Score> result = new ArrayList<Score>();
+	@GetMapping("/scores/{id}")
+	public ResponseEntity<Score> getScore(@PathVariable long id) {
+    Score result = null;
     try {
-      Iterator<ScoreEntity> score_iterator = scoreRepository.findAll().iterator();
-      while(score_iterator.hasNext()){
-        ScoreEntity m = score_iterator.next();
-        Score s = new Score(m.getId(),m.getPlayer(),m.getScore(),m.getTime().getTime());
-        result.add(s);
+      Optional<ScoreEntity> s = scoreRepository.findById(id);
+      if (s.isPresent()){
+        result = new Score(s.get()); 
+        return ResponseEntity.status(HttpStatus.OK).body(result);
       }
     } catch (Exception e){
       System.out.println(e);
     }
-    return (result.size() > 0)? result.get(0) : null;
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   //Create Score
   //POST /score
   @PostMapping("/scores")
-  public @ResponseBody String createScore (@RequestParam String player, @RequestParam int score,@RequestParam String time) {
+  public ResponseEntity<Score> createScore (
+    @RequestParam(value = "player", defaultValue = "")  String player,
+    @RequestParam(value = "score", defaultValue = "-1")  int score,
+    @RequestParam(value = "time", defaultValue = "")  String time
+  ) {
+    Score result = null;
     try{
-      ScoreEntity s = new ScoreEntity();
-      s.setPlayer(player);
-      s.setScore(score);
-      Date date = new Date();
-      s.setTime(new Timestamp(date.getTime()));
-      scoreRepository.save(s);
+      ScoreEntity s = new ScoreEntity(player,score,time);
+      result = new Score(scoreRepository.saveAndFlush(s));
+      return ResponseEntity.status(HttpStatus.OK).body(result);
     } catch (Exception e){
       System.out.println(e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-    return "Saved";
   }  
 
   //Delete Score
   //DELETE /score/{id}
-  @DeleteMapping("/scores")
-  public @ResponseBody String deleteScore(@RequestParam(value = "id", defaultValue = "0") long id) {
+  @DeleteMapping("/scores/{id}")
+  public ResponseEntity<Score> deleteScore(@PathVariable long id) {
+    Score result = null;
     try{
       Optional<ScoreEntity> s = scoreRepository.findById(id);
       if (s.isPresent()){
+        result = new Score(s.get());
         scoreRepository.delete(s.get());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
       }
     }catch (Exception e){
       System.out.println(e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-    return "Deleted";
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   //Get list of scores
-  //GET /scores
+  //GET /scores/search
   //parameter {player}
   //parameter {time}
   //parameter player=[player1,player2,player3], time={time}
   //patameter start={time1},end{time2}
+  @GetMapping("/scores/search")
+  public ResponseEntity<List<Score>> getScoreBySearch(
+    @RequestParam(value = "player", required = false) List<String> player,
+    @RequestParam(value = "since", required = false) String since,
+    @RequestParam(value = "until", required = false) String until
+  ) {
+    if (player == null && since == null && until == null){
+      //return ResponseEntity.status(HttpStatus.OK).body(getScoreAll());
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    } else if (player != null && since == null && until == null) {
+      return ResponseEntity.status(HttpStatus.OK).body(getScoreByPlayers(player));
+    }
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+/*
+  private List<Score> getScoreAll() {
+    List<Score> result = new ArrayList<Score>();
+    Iterator<ScoreEntity> score_iterator = scoreRepository.findAll().iterator();
+    while(score_iterator.hasNext()){
+      ScoreEntity m = score_iterator.next();
+      Score s = new Score(m.getId(),m.getPlayer(),m.getScore(),m.getTime());
+      result.add(s);
+    }
+    return result;
+  }
+*/
+
+  private List<Score> getScoreByPlayers(List<String> player) {
+    List<Score> result = new ArrayList<Score>();
+    Iterator<ScoreEntity> score_iterator = scoreRepository.findByPlayers(player).iterator();
+    while(score_iterator.hasNext()){
+      ScoreEntity m = score_iterator.next();
+      Score s = new Score(m.getId(),m.getPlayer(),m.getScore(),m.getTime());
+      result.add(s);
+    }
+    return result;
+  }
 
   //GET /users/{id}/history
 }
