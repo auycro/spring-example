@@ -55,3 +55,35 @@ rm -rf $HOME/.gradle/caches/
 ```
 ./gradlew assemble  --refresh-dependencies
 ```
+
+- date parameters rule
+
+```
+time_range
+{'since':YYYY-MM-DD,'until':YYYY-MM-DD}
+A single time range object. UNIX timestamp not supported. This param is ignored if time_ranges is provided.
+
+time_ranges
+list<{'since':YYYY-MM-DD,'until':YYYY-MM-DD}>
+Array of time range objects. Time ranges can overlap, for example to return cumulative insights. Each time range will have one result set. You cannot have more granular results with time_increment setting in this case.If time_ranges is specified, date_preset, time_range and time_increment are ignored.
+
+since
+datetime
+A date in the format of "YYYY-MM-DD", which means from the beginning midnight of that day.
+
+until
+datetime
+A date in the format of "YYYY-MM-DD", which means to the beginning midnight of the following day.
+```
+
+- Test Create 
+
+```
+curl -X POST localhost:8080/score -d player=First -d score=6666 -d time=2021-01-25
+```
+
+- Login to Mysql
+
+```
+docker exec -it score_db mysql -ujava_app -pfoobar score_db
+```

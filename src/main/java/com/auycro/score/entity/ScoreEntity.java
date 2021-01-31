@@ -1,7 +1,10 @@
 package com.auycro.score.entity;
 
-import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+//import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Base64;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 @Table(name="scores")
-public class ScoreEntity implements Serializable {
+public class ScoreEntity {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   @Column(name="id")
@@ -20,6 +23,9 @@ public class ScoreEntity implements Serializable {
 
   @Column(name="player")
   private String player;
+
+  @Column(name="hash_player")
+  private String hash_player;
 
   @Column(name="score")
   private int score;
@@ -39,8 +45,18 @@ public class ScoreEntity implements Serializable {
     return player;
   }
 
+  public static String toSHA1(byte[] convertme) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("SHA-1");
+    return Base64.getEncoder().encodeToString(md.digest(convertme));
+  }
+
   public void setPlayer(String player) {
-    this.player = player;
+    this.player = player.toLowerCase();
+    try{
+      this.hash_player = toSHA1(this.player.getBytes());
+    } catch (Exception e){
+      System.out.println(e);
+    }
   }
 
   public int getScore() {
