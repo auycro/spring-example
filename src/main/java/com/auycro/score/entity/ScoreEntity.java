@@ -1,25 +1,17 @@
 package com.auycro.score.entity;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.DatatypeConverter;
 
 import com.auycro.score.utility.DateUtility;
+import com.auycro.score.utility.StringUtility;
 
 @Entity
 @Table(name = "scores")
 public class ScoreEntity {
-  // @Id
-  // @GeneratedValue(strategy=GenerationType.AUTO, generator="seq_post")
-  // @SequenceGenerator(name="seq_post")
   @Id
-  // @GeneratedValue(strategy=GenerationType.AUTO)
   @Column(name = "id")
   private long id;
 
@@ -42,7 +34,7 @@ public class ScoreEntity {
     this.player = player;
     this.score = score;
     this.time = DateUtility.toUnixTimestamp(time);
-    this.hash_player = toSHA1(player);
+    this.hash_player = StringUtility.toMD5(player);
   }
 
   public long getId() {
@@ -76,13 +68,4 @@ public class ScoreEntity {
   public void setTime(long time) {
     this.time = time;
   }
-
-  public static String toSHA1(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-    String result = null;
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    md.update(input.getBytes("UTF-8"), 0, input.length());
-    result = DatatypeConverter.printHexBinary(md.digest());
-    return result;
-  }
-
 }

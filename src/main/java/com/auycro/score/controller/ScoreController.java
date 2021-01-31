@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-//import java.util.Iterator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import com.auycro.score.model.*;
 import com.auycro.score.repository.ScoreRepository;
 import com.auycro.score.utility.DateUtility;
+import com.auycro.score.utility.StringUtility;
 import com.auycro.score.entity.ScoreEntity;
 
 @RestController
@@ -28,11 +29,6 @@ public class ScoreController {
   
   @Autowired
   private ScoreRepository scoreRepository;
-
-  //@GetMapping("/")
-  //String hello() {
-  //    return "Hello Spring Boot!";
-  //}
 
   //Get Score
   //GET /scores/{id}
@@ -94,7 +90,7 @@ public class ScoreController {
   //parameter {player}
   //parameter {time}
   //parameter player=[player1,player2,player3], time={time}
-  //patameter start={time1},end{time2}
+  //patameter before={time1},after{time2}
   @GetMapping("/scores/search")
   public ResponseEntity<List<Score>> getScoreBySearch(
     @RequestParam(value = "player", required = false) List<String> player,
@@ -125,26 +121,12 @@ public class ScoreController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-/*
-  private List<Score> getScoreAll() {
-    List<Score> result = new ArrayList<Score>();
-    Iterator<ScoreEntity> score_iterator = scoreRepository.findAll().iterator();
-    while(score_iterator.hasNext()){
-      ScoreEntity m = score_iterator.next();
-      Score s = new Score(m.getId(),m.getPlayer(),m.getScore(),m.getTime());
-      result.add(s);
-    }
-    return result;
-  }
-*/
-
   private List<Score> getScoreByPlayersAndTimerange(List<String> player, long before, long after, Pageable paging) {
     Page<ScoreEntity> score_page = scoreRepository.findByPlayerAndTimerange(player, before, after, paging);
     List<ScoreEntity> score_entities = score_page.getContent();
     return toScoreList(score_entities);
   }
 
-  
   private List<Score> getScoreByTime(long before, long after, Pageable paging) throws Exception {
     Page<ScoreEntity> score_page = scoreRepository.findByTimerange(before, after, paging);
     List<ScoreEntity> score_entities = score_page.getContent();
@@ -159,5 +141,24 @@ public class ScoreController {
     return result;
   }
   
-  //GET /users/{id}/history
+  //GET /history
+  //parameter {player}
+  @GetMapping("/history")
+  public ResponseEntity<History> getHistory(@RequestParam(value = "player", required = true) String player){
+    List<Score> scores = new ArrayList<Score>();
+    try {
+      Iterator<ScoreEntity> score_entities = scoreRepository.findByHashPlayer(StringUtility.toMD5(player)).iterator();
+      while(score_entities.hasNext()){
+        scores.add(new Score(score_entities.next()));
+      }
+      if (scores.size() > 0){
+        History history = new History(scores);
+        return ResponseEntity.status(HttpStatus.OK).body(history); 
+      }
+    } catch (Exception e){
+      System.out.println(e);
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 }
