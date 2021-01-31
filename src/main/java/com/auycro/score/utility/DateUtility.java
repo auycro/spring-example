@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DateUtility {
   public static long toUnixTimestamp(String input) throws ParseException {
-    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+    Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(input);
     return date.getTime() / 1000L;
   }
 

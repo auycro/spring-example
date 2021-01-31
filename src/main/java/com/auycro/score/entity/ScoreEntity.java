@@ -34,7 +34,7 @@ public class ScoreEntity {
     this.player = player;
     this.score = score;
     this.time = DateUtility.toUnixTimestamp(time);
-    this.hash_player = StringUtility.toMD5(player);
+    this.hash_player = StringUtility.toMD5(player.toLowerCase());
   }
 
   public long getId() {
@@ -50,7 +50,7 @@ public class ScoreEntity {
   }
 
   public void setPlayer(String player) {
-    this.player = player.toLowerCase();
+    this.player = player;
   }
 
   public int getScore() {
