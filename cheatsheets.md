@@ -82,6 +82,7 @@ A date in the format of "YYYY-MM-DD", which means to the beginning midnight of t
 curl -X POST localhost:8080/scores -d player=First -d score=6666 -d time=2021-01-25
 curl -X DELETE localhost:8080/scores/21
 curl localhost:8080/scores/20
+curl "http://localhost:8080/scores/search?before=2021-01-10&page=0&limit=50&after=2020-12-31&player=dunkley&player=davey"
 ```
 
 - Login to Mysql

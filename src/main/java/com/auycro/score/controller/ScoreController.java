@@ -1,6 +1,9 @@
 package com.auycro.score.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import com.auycro.score.model.*;
 import com.auycro.score.repository.ScoreRepository;
+import com.auycro.score.utility.DateUtility;
 import com.auycro.score.entity.ScoreEntity;
 
 @RestController
@@ -94,16 +98,30 @@ public class ScoreController {
   @GetMapping("/scores/search")
   public ResponseEntity<List<Score>> getScoreBySearch(
     @RequestParam(value = "player", required = false) List<String> player,
-    @RequestParam(value = "since", required = false) String since,
-    @RequestParam(value = "until", required = false) String until
+    @RequestParam(value = "before", required = false) String before_str,
+    @RequestParam(value = "after", required = false) String after_str,
+    @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+    @RequestParam(value = "limit", defaultValue = "5", required = false) int limit
   ) {
-    if (player == null && since == null && until == null){
-      //return ResponseEntity.status(HttpStatus.OK).body(getScoreAll());
+    if (before_str == null && after_str == null && player == null){
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    } else if (player != null && since == null && until == null) {
-      return ResponseEntity.status(HttpStatus.OK).body(getScoreByPlayers(player));
     }
 
+    try {
+      Pageable paging = PageRequest.of(page, limit);
+
+      long before = (before_str != null)? DateUtility.toUnixTimestamp(before_str) : Long.MAX_VALUE;
+      long after = (after_str != null)? DateUtility.toUnixTimestamp(after_str) : Long.MIN_VALUE;
+
+      if (player != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(getScoreByPlayersAndTimerange(player, before, after, paging));
+      } else {
+        return ResponseEntity.status(HttpStatus.OK).body(getScoreByTime(before, after, paging));
+      }
+    } catch (Exception e){
+      System.out.println(e);
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
@@ -120,16 +138,26 @@ public class ScoreController {
   }
 */
 
-  private List<Score> getScoreByPlayers(List<String> player) {
+  private List<Score> getScoreByPlayersAndTimerange(List<String> player, long before, long after, Pageable paging) {
+    Page<ScoreEntity> score_page = scoreRepository.findByPlayerAndTimerange(player, before, after, paging);
+    List<ScoreEntity> score_entities = score_page.getContent();
+    return toScoreList(score_entities);
+  }
+
+  
+  private List<Score> getScoreByTime(long before, long after, Pageable paging) throws Exception {
+    Page<ScoreEntity> score_page = scoreRepository.findByTimerange(before, after, paging);
+    List<ScoreEntity> score_entities = score_page.getContent();
+    return toScoreList(score_entities);
+  }
+
+  private List<Score> toScoreList(List<ScoreEntity> score_entities){
     List<Score> result = new ArrayList<Score>();
-    Iterator<ScoreEntity> score_iterator = scoreRepository.findByPlayers(player).iterator();
-    while(score_iterator.hasNext()){
-      ScoreEntity m = score_iterator.next();
-      Score s = new Score(m.getId(),m.getPlayer(),m.getScore(),m.getTime());
-      result.add(s);
+    for (ScoreEntity s : score_entities) {
+      result.add(new Score(s));
     }
     return result;
   }
-
+  
   //GET /users/{id}/history
 }
