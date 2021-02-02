@@ -16,14 +16,14 @@ public class Score {
     this.id = id;
     this.player = player;
     this.score = score;
-    this.time = DateUtility.toTimestamp(time);
+    this.time = new Timestamp(time);
   }
 
   public Score(ScoreEntity entity) {
     this.id = entity.getId();
     this.player = entity.getPlayer();
     this.score = entity.getScore();
-    this.time = DateUtility.toTimestamp(entity.getTime());    
+    this.time = new Timestamp(entity.getJavaLongTimestamp());    
   }
 
 	public long getId() {

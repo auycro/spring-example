@@ -91,3 +91,20 @@ curl "http://localhost:8080/history?player=dunkley"
 ```
 docker exec -it score_db mysql -ujava_app -pfoobar score_db
 ```
+
+- 'README.md' online editor
+
+https://dillinger.io/
+
+- Gradle command
+
+```
+% ./gradlew tasks --all
+% ./gradlew project --info
+% ./gradlew properties --info
+% ./gradlew bootRun
+```
+
+- Springboot with docker
+
+https://spring.io/guides/gs/spring-boot-docker/

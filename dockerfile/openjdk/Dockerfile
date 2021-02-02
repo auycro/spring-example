@@ -1,6 +1,7 @@
-#FROM openjdk:8-jdk-alpine
-FROM adoptopenjdk/openjdk11:ubi
-#ARG JAR_FILE=target/*.jar
-ARG JAR_FILE=./*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM adoptopenjdk/openjdk11:ubi as base
+
+# Copy Everything
+FROM base AS build
+ARG ROOT_PROJECT=./build/libs/score-0.0.1-SNAPSHOT.jar
+COPY ${ROOT_PROJECT} app.jar
+ENTRYPOINT ["java","-jar","./app.jar"]

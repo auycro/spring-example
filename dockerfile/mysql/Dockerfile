@@ -1,10 +1,11 @@
-### MySQL 5.7.17
+### MySQL 8.0.23
 
 # Pull image
 FROM mysql:8.0.23
 
 # MySQL env
-ENV MYSQL_ROOT_PASSWORD=admin
+ENV MYSQL_ROOT_PASSWORD=admin \
+    TZ=Asia/Tokyo
     #MYSQL_USER=foo \
     #MYSQL_PASS=foobar
     #ON_CREATE_DB=**False** \
