@@ -30,7 +30,7 @@ public class History {
     this.player = scores.get(0).getPlayer();
     this.topScore = scores.stream().max(Comparator.comparing(Score::getScore)).get();
     this.lowScore = scores.stream().min(Comparator.comparing(Score::getScore)).get();
-    this.average = this.avg();
+    this.average = this.calculateAverage();
   }
 
   public String getPlayer(){
@@ -53,7 +53,7 @@ public class History {
 		return scores;
   }
 
-  public double avg(){
+  private double calculateAverage(){
     long sum = 0;
     List<Score> scores = getScore();
     for(int i=0;i<scores.size();i++){

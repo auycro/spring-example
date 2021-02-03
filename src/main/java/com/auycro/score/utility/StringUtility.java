@@ -12,6 +12,6 @@ public class StringUtility {
     MessageDigest md = MessageDigest.getInstance("MD5");
     md.update(input.getBytes("UTF-8"), 0, input.length());
     result = DatatypeConverter.printHexBinary(md.digest());
-    return result;
+    return result.toLowerCase();
   }
 }

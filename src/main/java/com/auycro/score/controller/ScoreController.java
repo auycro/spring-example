@@ -109,11 +109,7 @@ public class ScoreController {
       long before = (before_str != null)? DateUtility.toUnixTimestamp(before_str) : Long.MAX_VALUE;
       long after = (after_str != null)? DateUtility.toUnixTimestamp(after_str) : Long.MIN_VALUE;
 
-      if (player != null) {
-        return ResponseEntity.status(HttpStatus.OK).body(getScoreByPlayersAndTimerange(player, before, after, paging));
-      } else {
-        return ResponseEntity.status(HttpStatus.OK).body(getScoreByTime(before, after, paging));
-      }
+      return ResponseEntity.status(HttpStatus.OK).body(getScoreByPlayersAndTimerange(player, before, after, paging));
     } catch (Exception e){
       System.out.println(e);
       ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -122,13 +118,12 @@ public class ScoreController {
   }
 
   private List<Score> getScoreByPlayersAndTimerange(List<String> player, long before, long after, Pageable paging) {
-    Page<ScoreEntity> score_page = scoreRepository.findByPlayerAndTimerange(player, before, after, paging);
-    List<ScoreEntity> score_entities = score_page.getContent();
-    return toScoreList(score_entities);
-  }
-
-  private List<Score> getScoreByTime(long before, long after, Pageable paging) throws Exception {
-    Page<ScoreEntity> score_page = scoreRepository.findByTimerange(before, after, paging);
+    Page<ScoreEntity> score_page = null;
+    if (player == null || player.size() < 1){
+      score_page = scoreRepository.findByTimerange(before, after, paging);
+    } else {
+      score_page = scoreRepository.findByPlayerAndTimerange(player, before, after, paging);
+    }
     List<ScoreEntity> score_entities = score_page.getContent();
     return toScoreList(score_entities);
   }

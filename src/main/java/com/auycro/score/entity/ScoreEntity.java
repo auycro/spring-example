@@ -1,5 +1,7 @@
 package com.auycro.score.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -67,5 +69,9 @@ public class ScoreEntity {
 
   public void setTime(long time) {
     this.time = time;
+  }
+
+  public long getJavaLongTimestamp(){
+    return this.time * 1000;
   }
 }
