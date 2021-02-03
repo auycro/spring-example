@@ -136,7 +136,7 @@
     |------|-------------|
     | 200  | success search score  |
     
-    --- Example ---
+    --- Example 1 ---
     ```
     curl -X GET http://localhost:8080/scores/search?player=dunkley&page=0
     ```
@@ -144,9 +144,8 @@
     ```
     [{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00.000+00:00"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00.000+00:00"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00.000+00:00"},{"id":23,"player":"dunkley","score":40,"time":"2021-01-04T00:00:00.000+00:00"},{"id":24,"player":"dunkley","score":50,"time":"2021-01-05T00:00:00.000+00:00"}]
     ```
-
-<br/>
-
+    
+    --- Example 2 ---
     ```
     curl "http://localhost:8080/scores/search?before=2021-01-10&page=0&limit=4&after=2020-12-31&player=dunkley&player=davey"
     ```
