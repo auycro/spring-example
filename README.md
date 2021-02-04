@@ -59,7 +59,7 @@
     ```
 
     ```
-    {"id":2,"player":"zimmerman","score":110,"time":"2020-11-01T00:00:00.000+00:00"}
+    {"id":2,"player":"zimmerman","score":110,"time":"2020-11-01T00:00:00Z"}
     ```
 <br/>
 <br/>
@@ -86,7 +86,7 @@
     ```
 
     ```
-    {"id":0,"player":"foo","score":6666,"time":"2021-01-24T15:00:00.000+00:00"}
+    {"id":0,"player":"foo","score":6666,"time":"2021-01-24T15:00:00Z"}
     ```
 
 <br/>
@@ -112,7 +112,7 @@
     ```
 
     ```
-    {"id":12,"player":"o'reilly","score":24,"time":"2020-12-21T00:00:00.000+00:00"}
+    {"id":12,"player":"o'reilly","score":24,"time":"2020-12-21T00:00:00Z"}
     ```
 
 <br/>
@@ -142,7 +142,7 @@
     ```
 
     ```
-    [{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00.000+00:00"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00.000+00:00"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00.000+00:00"},{"id":23,"player":"dunkley","score":40,"time":"2021-01-04T00:00:00.000+00:00"},{"id":24,"player":"dunkley","score":50,"time":"2021-01-05T00:00:00.000+00:00"}]
+    [{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00Z"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00Z"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00Z"},{"id":23,"player":"dunkley","score":40,"time":"2021-01-04T00:00:00Z"},{"id":24,"player":"dunkley","score":50,"time":"2021-01-05T00:00:00Z"}]
     ```
     
     --- Example 2 ---
@@ -151,7 +151,7 @@
     ```
 
     ```
-    [{"id":1,"player":"davey","score":100,"time":"2021-01-01T00:00:00.000+00:00"},{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00.000+00:00"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00.000+00:00"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00.000+00:00"}]
+    [{"id":1,"player":"davey","score":100,"time":"2021-01-01T00:00:00Z"},{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00Z"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00Z"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00Z"}]
     ```
 
 <br/>
@@ -177,5 +177,5 @@
     ```
 
     ```
-    {"player":"dunkley","topScore":{"id":29,"player":"dunkley","score":100,"time":"2021-01-10T00:00:00.000+00:00"},"lowScore":{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00.000+00:00"},"average":55.0,"score":[{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00.000+00:00"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00.000+00:00"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00.000+00:00"},{"id":23,"player":"dunkley","score":40,"time":"2021-01-04T00:00:00.000+00:00"},{"id":24,"player":"dunkley","score":50,"time":"2021-01-05T00:00:00.000+00:00"},{"id":25,"player":"dunkley","score":60,"time":"2021-01-06T00:00:00.000+00:00"},{"id":26,"player":"dunkley","score":70,"time":"2021-01-07T00:00:00.000+00:00"},{"id":27,"player":"dunkley","score":80,"time":"2021-01-08T00:00:00.000+00:00"},{"id":28,"player":"dunkley","score":90,"time":"2021-01-09T00:00:00.000+00:00"},{"id":29,"player":"dunkley","score":100,"time":"2021-01-10T00:00:00.000+00:00"}]}
+    {"player":"dunkley","topScore":{"id":29,"player":"dunkley","score":100,"time":"2021-01-10T00:00:00Z"},"lowScore":{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00Z"},"average":55.0,"score":[{"id":20,"player":"dunkley","score":10,"time":"2021-01-01T00:00:00Z"},{"id":21,"player":"dunkley","score":20,"time":"2021-01-02T00:00:00Z"},{"id":22,"player":"dunkley","score":30,"time":"2021-01-03T00:00:00Z"},{"id":23,"player":"dunkley","score":40,"time":"2021-01-04T00:00:00Z"},{"id":24,"player":"dunkley","score":50,"time":"2021-01-05T00:00:00Z"},{"id":25,"player":"dunkley","score":60,"time":"2021-01-06T00:00:00Z"},{"id":26,"player":"dunkley","score":70,"time":"2021-01-07T00:00:00Z"},{"id":27,"player":"dunkley","score":80,"time":"2021-01-08T00:00:00Z"},{"id":28,"player":"dunkley","score":90,"time":"2021-01-09T00:00:00Z"},{"id":29,"player":"dunkley","score":100,"time":"2021-01-10T00:00:00Z"}]}
     ```
