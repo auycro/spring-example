@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException.NotImplemented;
+
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +36,7 @@ public class ScoreController {
   //Get Score
   //GET /scores/{id}
 	@GetMapping("/scores/{id}")
-	public ResponseEntity<Score> getScore(@PathVariable long id) {
+	public ResponseEntity<Score> getScore(@PathVariable(required = true, value = "id") long id) {
     Score result = null;
     try {
       Optional<ScoreEntity> s = scoreRepository.findById(id);
@@ -51,9 +54,9 @@ public class ScoreController {
   //POST /score
   @PostMapping("/scores")
   public ResponseEntity<Score> createScore (
-    @RequestParam(value = "player", defaultValue = "")  String player,
-    @RequestParam(value = "score", defaultValue = "-1")  int score,
-    @RequestParam(value = "time", defaultValue = "")  String time
+    @RequestParam(value = "player", required = true)  String player,
+    @RequestParam(value = "score", required =  true)  int score,
+    @RequestParam(value = "time", required =  true)  String time
   ) {
     Score result = null;
     try{
@@ -64,12 +67,12 @@ public class ScoreController {
       System.out.println(e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-  }  
+  }
 
   //Delete Score
   //DELETE /score/{id}
   @DeleteMapping("/scores/{id}")
-  public ResponseEntity<Score> deleteScore(@PathVariable long id) {
+  public ResponseEntity<Score> deleteScore(@PathVariable(required = true, name = "id") long id) {
     Score result = null;
     try{
       Optional<ScoreEntity> s = scoreRepository.findById(id);
