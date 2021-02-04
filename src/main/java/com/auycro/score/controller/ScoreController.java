@@ -159,9 +159,4 @@ public class ScoreController {
     }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
-
-  // TODO: Add Time Validate
-  private boolean validateTime(String time) throws NotImplementedException {
-    throw new NotImplementedException("validateTime");
-  }
 }
